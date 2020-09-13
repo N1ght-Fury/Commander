@@ -100,5 +100,59 @@ namespace Commander.Controllers
 
             return NoContent();
         }
+
+        //DELETE api/commands/{id}
+        [HttpDelete("{id}")]
+        public ActionResult DeleteCommand(int id)
+        {
+            var commandModelFromRepo = _repository.GetCommandById(id);
+            if (commandModelFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            _repository.DeleteCommand(commandModelFromRepo);
+            _repository.SaveChanges();
+
+            return NoContent();
+        }
+
+        /* 
+        How patch request should look like:
+        [
+        {
+            "op":"test",
+            "path":"/a/b/c",
+            "value":"foo"
+        },
+        {
+            "op":"remove",
+            "path":"/a/b/c"
+        },
+        {
+            "op":"add",
+            "path":"/a/b/c",
+            "value":[
+            "foo",
+            "bar"
+            ]
+        },
+        {
+            "op":"replace",
+            "path":"/a/b/c",
+            "value":42
+        },
+        {
+            "op":"move",
+            "from":"/a/b/c",
+            "path":"/a/b/d"
+        },
+        {
+            "op":"copy",
+            "from":"/a/b/d",
+            "path":"/a/b/e"
+        }
+        ]
+         */
     }
 }
